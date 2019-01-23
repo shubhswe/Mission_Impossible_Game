@@ -32,12 +32,12 @@ public class Treasure {
     }
 
     public int randomY(){
-        return ThreadLocalRandom.current().nextInt(2, 23);
+        return ThreadLocalRandom.current().nextInt(2, 22);
 
     }
 
     public int randomX(){
-        return ThreadLocalRandom.current().nextInt(2, 79);
+        return ThreadLocalRandom.current().nextInt(2, 78);
 
     }
 }

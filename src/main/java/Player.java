@@ -47,5 +47,9 @@ public class Player {
         this.oldY = oldY;
     }
 
+    public static void movement(){
+
+
+    }
 
 }

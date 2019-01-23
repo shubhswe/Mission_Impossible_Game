@@ -24,10 +24,15 @@ public class Main {
         Terminal terminal = terminalFactory.createTerminal();
         terminal.setCursorVisible(false);
 
-        Player tom = new Player(0,2);
-        Treasure treasure1= new Treasure();
-        drawBoard(terminal, tom, treasure1);
+        Player tom = new Player(0, 2);
+        Treasure treasure1 = new Treasure();
 
+        boolean playerIsAlive=true;
+
+        while (playerIsAlive) {
+
+            drawBoard(terminal, tom, treasure1);
+        }
     }
 
     public static void drawBoard(Terminal terminal, Player tom, Treasure treasure1) throws IOException {
