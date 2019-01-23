@@ -1,3 +1,6 @@
+import java.util.concurrent.ThreadLocalRandom;
+
+
 public class Treasure {
     private int x;
     private int y;
@@ -22,5 +25,15 @@ public class Treasure {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public int randomY(){
+        return ThreadLocalRandom.current().nextInt(1, 20);
+
+    }
+
+    public void randomX(){
+
+
     }
 }
