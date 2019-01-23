@@ -4,11 +4,15 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Treasure {
     private int x;
     private int y;
-    private char treasure = '*';
+    private char symbol = '*';
 
-    public Treasure(int x, int y) {
-        this.x = x;
-        this.y = y;
+//    public Treasure(int x, int y) {
+//        this.x = x;
+//        this.y = y;
+//    }
+
+    public char getSymbol() {
+        return symbol;
     }
 
     public int getX() {
@@ -28,12 +32,12 @@ public class Treasure {
     }
 
     public int randomY(){
-        return ThreadLocalRandom.current().nextInt(1, 20);
+        return ThreadLocalRandom.current().nextInt(2, 23);
 
     }
 
-    public void randomX(){
-
+    public int randomX(){
+        return ThreadLocalRandom.current().nextInt(2, 79);
 
     }
 }

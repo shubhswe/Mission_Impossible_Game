@@ -25,17 +25,17 @@ public class Main {
         terminal.setCursorVisible(false);
 
         Player tom = new Player(0,2);
-        drawBoard(terminal, tom);
-
-
-
-
+        Treasure treasure1= new Treasure();
+        drawBoard(terminal, tom, treasure1);
 
     }
 
-    public static void drawBoard(Terminal terminal, Player tom) throws IOException {
-        terminal.setCursorPosition(tom.getX(), tom.getY());
+    public static void drawBoard(Terminal terminal, Player tom, Treasure treasure1) throws IOException {
+        terminal.setCursorPosition(tom.getX(), tom.getY());         //printing tom
         terminal.putCharacter(tom.getSymbol());
+
+        terminal.setCursorPosition(treasure1.randomX(), treasure1.randomY());         // printing treasure
+        terminal.putCharacter(treasure1.getSymbol());
         terminal.flush();
     }
 
