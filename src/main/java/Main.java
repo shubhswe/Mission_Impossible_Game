@@ -2,7 +2,9 @@ import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
+import jaco.mp3.player.MP3Player;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,6 +16,8 @@ public class Main {
         DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory();
         Terminal terminal = terminalFactory.createTerminal();
         terminal.setCursorVisible(false);
+
+        new MP3Player(new File("Mission-Impossible.mp3")).play();
 
         Player tom = new Player(10, 2);
         Treasure treasure1 = new Treasure();
@@ -189,6 +193,7 @@ public class Main {
 
             if(!treasure1.isCollected()) {
                 terminal.setCursorPosition(tom.getX(), tom.getY());
+                new MP3Player(new File("Ball+Hit+Cheer.mp3")).play();
                 treasure1.setSymbol(' ');
                 treasure1.setCollected(true);
             }
