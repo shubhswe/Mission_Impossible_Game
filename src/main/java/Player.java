@@ -96,4 +96,21 @@ public class Player {
         x++;
     }
 
+    public void reverseDirection(){
+
+        switch (this.direction){
+            case 1:
+                setDirection(3);
+                break;
+            case 2:
+                setDirection(4);
+                break;
+            case 3:
+                setDirection(1);
+                break;
+            case 4:
+                setDirection(2);
+                break;
+        }
+    }
 }
