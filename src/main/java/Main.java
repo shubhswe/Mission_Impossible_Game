@@ -8,9 +8,7 @@ import java.io.IOException;
 /*
        while(true){
 
-       drawBoard();            - Prints Player, Treasure and possible Guard and Obastacle to the terminal
-
-       changeDirection();      - Takes keyboard input which defines direction (Doesn't move here)
+       drawBoard();            - Prints Player, Treasure and possible Guard and Obstacle to the terminal
 
        movePlayer();           - Moves Player one step in the set direction
 
@@ -27,54 +25,46 @@ public class Main {
 
         Player tom = new Player(0, 2);
         Treasure treasure1 = new Treasure();
-        Obstacle obstacle = new Obstacle(25, 16);
+        Obstacle obstacle = new Obstacle();
+        Obstacle topWall = new Obstacle();
+        Obstacle leftWall = new Obstacle();
+        Obstacle bottomWall = new Obstacle();
+        Obstacle rightWall = new Obstacle();
 
         KeyStroke keyStroke = null;
         int gameSpeed = 100;                                    //Sets the speed of the game, lower number means faster game (milliseconds)
 
         boolean playerIsAlive=true;
 
-        obstacle.printBlock(3, 3, terminal,obstacle);
         while (playerIsAlive) {
-
-
+            
             movePlayer(keyStroke, tom, terminal);               //Sets direction based on arrow keys and moves player one step in set direction. (default direction is right.)
 
-            drawBoard(terminal, tom, obstacle, treasure1);
+            //checkMovement();
+
+            drawBoard(terminal, tom, obstacle, topWall, leftWall, bottomWall, rightWall, treasure1);
 
             Thread.sleep(gameSpeed);
 
         }
     }
 
-    public static void drawBoard(Terminal terminal, Player tom, Obstacle obstacle, Treasure treasure1) throws IOException {
-        terminal.setCursorPosition(tom.getX(), tom.getY());         //printing tom
+    public static void drawBoard(Terminal terminal, Player tom, Obstacle obstacle, Obstacle topWall, Obstacle leftWall, Obstacle bottomWall, Obstacle rightWall, Treasure treasure1) throws IOException {
+        terminal.setCursorPosition(tom.getX(), tom.getY());                      //printing tom
         terminal.putCharacter(tom.getSymbol());
         terminal.setCursorPosition(tom.getOldX(), tom.getOldY());
         terminal.putCharacter(' ');
 
-
         terminal.setCursorPosition(treasure1.getX(), treasure1.getY());         // printing treasure
         terminal.putCharacter(treasure1.getSymbol());
 
-
-//        terminal.setCursorPosition(25, 16);         //i=0
-//        terminal.putCharacter(obstacle.getSymbol());
-//        terminal.setCursorPosition(26, 16);         //i=1
-//        terminal.putCharacter(obstacle.getSymbol());
-//        terminal.setCursorPosition(25, 17);         //i=2
-//        terminal.putCharacter(obstacle.getSymbol());
-//        terminal.setCursorPosition(26, 17);         //i=3
-//        terminal.putCharacter(obstacle.getSymbol());
-//
-
-
-        //   terminal.setCursorPosition();         //printing obstacle
-//            terminal.putCharacter(obstacle.getSymbol());
-//           obstacle.printBlock(25, 16);
+        obstacle.printBlock(3, 3, terminal);                        //Printing obstacles
+        topWall.printBlock(80,1,0,0,terminal);
+        leftWall.printBlock(2,20,0, 4,terminal);
+        bottomWall.printBlock(80,1,0,24,terminal);
+        rightWall.printBlock(2,20,78,0,terminal);
 
         terminal.flush();
-
         }
 
 
