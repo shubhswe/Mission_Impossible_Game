@@ -6,10 +6,10 @@ public class Treasure {
     private int y;
     private char symbol = '*';
 
-//    public Treasure(int x, int y) {
-//        this.x = x;
-//        this.y = y;
-//    }
+    public Treasure() {
+        this.x = randomX();
+        this.y = randomY();
+    }
 
     public char getSymbol() {
         return symbol;
