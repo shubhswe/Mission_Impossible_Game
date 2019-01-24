@@ -6,10 +6,8 @@ public class Player {
     private  int oldY;
     private int direction = 4;
     private char symbol = 'X';
+    private boolean isAlive = true;
 
-    public char getSymbol() {
-        return symbol;
-    }
 
     public Player(int x, int y) {
         this.x = x;
@@ -46,6 +44,18 @@ public class Player {
 
     public void setOldY(int oldY) {
         this.oldY = oldY;
+    }
+
+    public char getSymbol() {
+        return symbol;
+    }
+
+    public boolean isAlive() {
+        return isAlive;
+    }
+
+    public void setAlive(boolean alive) {
+        isAlive = alive;
     }
 
     public int getDirection() {

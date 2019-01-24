@@ -1,3 +1,4 @@
+import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
@@ -8,18 +9,6 @@ import java.util.Collections;
 import java.util.List;
 
 
-/*
-       while(true){
-
-       drawBoard();            - Prints Player, Treasure and possible Guard and Obstacle to the terminal
-
-       movePlayer();           - Moves Player one step in the set direction
-
-       checkMovement();        - Checks if Player has hit something, Treasure/Guard so on.
-
-       }
-        */
-
 public class Main {
     public static void main(String[] args) throws IOException, InterruptedException {
         DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory();
@@ -27,8 +16,6 @@ public class Main {
         terminal.setCursorVisible(false);
 
         Player tom = new Player(10, 2);
-        Police police = new Police(0,2,'P');
-        Police police1 = new Police(78,2,'P');
         Treasure treasure1 = new Treasure();
         List<Obstacle> listOfObstacles = new ArrayList<>(); //list of obstacles
         Obstacle obstacle = new Obstacle();
@@ -38,31 +25,104 @@ public class Main {
         Obstacle rightWall = new Obstacle();
         Collections.addAll(listOfObstacles,obstacle, topWall, leftWall, bottomWall, rightWall);
 
+        List<Police> listOfPolice = new ArrayList<>();
+        listOfPolice.add(new Police(0,2,'P'));
+        listOfPolice.add(new Police(78,2,'P'));
 
         KeyStroke keyStroke = null;
-        int gameSpeed = 80;            //Sets the speed of the game, lower number means faster game (milliseconds)
+        int gameSpeed = 80;         //Sets the speed of the game, lower number means faster game (milliseconds)
+        int treasuresToCollect = 1;
 
 
-        boolean playerIsAlive=true;
+        //welcomeScreen(terminal);
+        levelCountdown(terminal);
 
+        while (tom.isAlive()) {
 
-
-        while (playerIsAlive) {
-
-            drawBoard(terminal, tom, police, police1, obstacle, topWall, leftWall, bottomWall, rightWall, treasure1);
+            drawBoard(terminal, tom, obstacle, topWall, leftWall, bottomWall, rightWall, treasure1, listOfPolice);
 
             movePlayer(keyStroke, tom, terminal);               //Sets direction based on arrow keys and moves player one step in set direction. (default direction is right.)
 
-            movePolice(police,police1, tom);
+            movePolice(listOfPolice, tom);
 
-            checkMove(terminal, tom, treasure1, listOfObstacles);
+            checkMove(terminal, tom, treasure1, listOfObstacles, listOfPolice);
 
             Thread.sleep(gameSpeed);
 
         }
+
+        terminal.clearScreen();
+        terminal.setForegroundColor(TextColor.ANSI.RED);
+        printTextDelay(terminal,"GAME OVER", 35,10,200);
+        terminal.setForegroundColor(TextColor.ANSI.WHITE);
     }
 
-    public static void drawBoard(Terminal terminal, Player tom, Police police, Police police1, Obstacle obstacle, Obstacle topWall, Obstacle leftWall, Obstacle bottomWall, Obstacle rightWall, Treasure treasure1) throws IOException {
+    public static void welcomeScreen(Terminal terminal) throws IOException, InterruptedException {
+        boolean hasStartedGame = false;
+        KeyStroke keyStroke = null;
+
+        while(!hasStartedGame){
+
+            terminal.setForegroundColor(TextColor.ANSI.GREEN);
+            printTextDelay(terminal,"MISSION IMPOSSIBLE: THE GAME", 25, 3,200);
+            printTextDelay(terminal,"-----------------------------",25,2,30);
+            printTextDelay(terminal,"-----------------------------",25,4,30);
+
+            printTextDelay(terminal,"Some super evil villain has", 25,7,60 );
+            printTextDelay(terminal,"stolen valuable items and put", 25,8,60 );
+            printTextDelay(terminal,"them in a museum.", 25,9,60 );
+            Thread.sleep(200);
+            printTextDelay(terminal,"We need to get them back.", 25,11,60 );
+            printTextDelay(terminal,"Collect the items", 25,13,60 );
+            printTextDelay(terminal,"and get out of there.", 25,14,60 );
+            printTextDelay(terminal,"They WILL try to get you...", 25,16,60 );
+
+
+            printTextDelay(terminal,"Start mission:", 25,18,60 );
+
+            while(keyStroke == null) {
+                printTextDelay(terminal, "Y", 40, 18, 60);
+                Thread.sleep(500);
+                printTextDelay(terminal, " ", 40, 18, 60);
+                Thread.sleep(500);
+                keyStroke = terminal.pollInput();
+            }
+            hasStartedGame = true;
+            terminal.clearScreen();
+        }
+    }
+
+    public static void levelCountdown(Terminal terminal) throws IOException, InterruptedException {
+
+        printTextDelay(terminal,"Level 1, starting in:", 30,10,60);
+
+        Thread.sleep(600);
+        printTextDelay(terminal, "3", 40, 12, 0);
+        Thread.sleep(600);
+        printTextDelay(terminal, " ", 40, 12, 0);
+        Thread.sleep(600);
+        printTextDelay(terminal, "2", 40, 12, 0);
+        Thread.sleep(600);
+        printTextDelay(terminal, " ", 40, 12, 0);
+        Thread.sleep(600);
+        printTextDelay(terminal, "1", 40, 12, 0);
+        Thread.sleep(600);
+        printTextDelay(terminal, " ", 40, 12, 0);
+        Thread.sleep(1000);
+
+        terminal.clearScreen();
+        terminal.setForegroundColor(TextColor.ANSI.WHITE);
+        terminal.flush();
+
+    }
+
+    public static void drawBoard(Terminal terminal, Player tom, Obstacle obstacle, Obstacle topWall, Obstacle leftWall, Obstacle bottomWall, Obstacle rightWall, Treasure treasure1,List<Police> listOfPolice) throws IOException, InterruptedException {
+
+        if(!treasure1.isCollected()) {
+            printTextDelay(terminal, "Collect item(s)", 32, 1, 0);
+        }else{
+            printTextDelay(terminal, "Get out of there!", 32, 1, 0);
+        }
 
         terminal.setCursorPosition(treasure1.getX(), treasure1.getY());         // printing treasure
         terminal.putCharacter(treasure1.getSymbol());
@@ -72,24 +132,22 @@ public class Main {
         terminal.setCursorPosition(tom.getOldX(), tom.getOldY());
         terminal.putCharacter(' ');
 
-        terminal.setCursorPosition(police.getX(), police.getY());                      //printing tom
-        terminal.putCharacter(police.getSymbol());
-        terminal.setCursorPosition(police.getOldX(), police.getOldY());
-        terminal.putCharacter(' ');
 
-        terminal.setCursorPosition(police1.getX(), police1.getY());                      //printing tom
-        terminal.putCharacter(police1.getSymbol());
-        terminal.setCursorPosition(police1.getOldX(), police1.getOldY());
-        terminal.putCharacter(' ');
+        for(Police p: listOfPolice){
+            terminal.setCursorPosition(p.getX(), p.getY());                      //printing police
+            terminal.putCharacter(p.getSymbol());
+            terminal.setCursorPosition(p.getOldX(), p.getOldY());
+            terminal.putCharacter(' ');
+        }
 
-        obstacle.printBlock(3, 3, terminal);            //Printing obstacles
+        obstacle.printBlock(3, 3, terminal);                     //Printing obstacles
         topWall.printBlock(80,1,0,0,terminal);
         leftWall.printBlock(2,20,0, 4,terminal);
         bottomWall.printBlock(80,1,0,23,terminal);
         rightWall.printBlock(2,20,78,0,terminal);
+
         terminal.flush();
         }
-
 
     public static void movePlayer(KeyStroke keyStroke, Player tom, Terminal terminal) throws IOException {
         keyStroke = terminal.pollInput();
@@ -115,9 +173,7 @@ public class Main {
         terminal.flush();
     }
 
-
-
-    public static void checkMove(Terminal terminal, Player tom, Treasure treasure1, List <Obstacle> listOfObstacles) throws IOException {
+    public static void checkMove(Terminal terminal, Player tom, Treasure treasure1, List <Obstacle> listOfObstacles, List<Police> listOfPolice) throws IOException, InterruptedException {
 
         for(Obstacle o: listOfObstacles){
             for(Position p: o.getPositions()){
@@ -131,27 +187,50 @@ public class Main {
 
         if (tom.getX()==treasure1.getX()&&tom.getY()==treasure1.getY()){
 
-            if(treasure1.isNotTaken()) {
+            if(!treasure1.isCollected()) {
                 terminal.setCursorPosition(tom.getX(), tom.getY());
                 treasure1.setSymbol(' ');
-                terminal.bell();
-                terminal.flush();
-                treasure1.setNotTaken(false);
+                treasure1.setCollected(true);
             }
         }
 
-        terminal.flush();
-
-    }
-
-    public static void movePolice(Police police, Police police1, Player tom){
-
-        if(police.count % 2 == 0) {
-            police.moveTowards(tom);
-            police1.moveTowards(tom);
+        for(Police p:listOfPolice){
+            if(tom.getX() == p.getX() && tom.getY() == p.getY()){
+                tom.setAlive(false);
+                terminal.bell();
+            }
         }
-        police.count++;
-        police1.count++;
+        terminal.flush();
     }
+
+    public static void movePolice(List<Police> listOfPolices, Player tom){
+
+        if(listOfPolices.get(0).count % 2 == 0) {
+            for (Police p : listOfPolices) {
+                p.moveTowards(tom);
+            }
+        }
+
+        for(Police p: listOfPolices){
+            p.count++;
+        }
+    }
+
+    static void printTextDelay(Terminal terminal, String text, int startingX, int startingY, int milliseconds) throws IOException, InterruptedException {
+
+        char[] charArray = text.toCharArray();
+        int loopEnd = startingX + charArray.length;
+
+        for (char e : charArray) {
+
+            terminal.setCursorPosition(startingX, startingY);
+            terminal.putCharacter(e);
+            startingX++;
+            Thread.sleep(milliseconds);
+            terminal.flush();
+        }
+
+    }
+
 
 }
