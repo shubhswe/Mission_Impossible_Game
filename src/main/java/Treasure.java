@@ -5,14 +5,27 @@ public class Treasure {
     private int x;
     private int y;
     private char symbol = '*';
+    private boolean notTaken=true;
 
-//    public Treasure(int x, int y) {
-//        this.x = x;
-//        this.y = y;
-//    }
+    public boolean isNotTaken() {
+        return notTaken;
+    }
+
+    public void setNotTaken(boolean notTaken) {
+        this.notTaken = notTaken;
+    }
+
+    public Treasure() {
+        this.x = randomX();
+        this.y = randomY();
+    }
 
     public char getSymbol() {
         return symbol;
+    }
+
+    public void setSymbol(char symbol) {
+        this.symbol = symbol;
     }
 
     public int getX() {
