@@ -151,6 +151,7 @@ public class Main {
 
     public static void levelCountdown(Terminal terminal) throws IOException, InterruptedException {
 
+        terminal.setForegroundColor(TextColor.ANSI.GREEN);
         printTextDelay(terminal,"Level 1, starting in:", 30,10,60);
 
         Thread.sleep(600);
@@ -174,6 +175,7 @@ public class Main {
     }
     public static void level2Countdown(Terminal terminal) throws IOException, InterruptedException {
 
+        terminal.setForegroundColor(TextColor.ANSI.GREEN);
         printTextDelay(terminal,"Level 2, starting in:", 30,10,60);
 
         Thread.sleep(600);
@@ -338,7 +340,7 @@ public class Main {
 
         if(!treasure1.isCollected() && !treasure2.isCollected()) {
             printTextDelay(terminal, "Collect item(s)", 32, 1, 0);
-        }else{
+        }else if(treasure1.isCollected() && treasure2.isCollected()){
             printTextDelay(terminal, "Get out of there!", 32, 1, 0);
 
             if (treasure1.getBlinker() % 2 == 0) {
