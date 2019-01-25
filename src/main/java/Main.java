@@ -297,6 +297,7 @@ public class Main {
         for (Obstacle o : listOfObstacles) {
             for (Position p : o.getPositions()) {
                 if (tom.getX() == p.getX() && tom.getY() == p.getY()) {
+                    new MP3Player(new File("bounce4.mp3")).play();
                     tom.reverseDirection();
                     tom.move();
                     terminal.flush();
@@ -316,7 +317,9 @@ public class Main {
 
         for (Police p : listOfPolice) {
             if (tom.getX() == p.getX() && tom.getY() == p.getY()) {
+                new MP3Player(new File("game-over.mp3")).play();
                 tom.setAlive(false);
+                new MP3Player(new File("Mission-Impossible.mp3")).stop();
                 terminal.bell();
             }
         }
@@ -451,6 +454,7 @@ public class Main {
         for(Obstacle o: listOfObstacles){
             for(Position p: o.getPositions()){
                 if( tom.getX() == p.getX() && tom.getY() == p.getY()){
+                    new MP3Player(new File("bounce4.mp3")).play();
                     tom.reverseDirection();
                     tom.move();
                     terminal.flush();
@@ -480,12 +484,11 @@ public class Main {
 
         for(Police p:listOfPolice){
             if(tom.getX() == p.getX() && tom.getY() == p.getY()){
+                new MP3Player(new File("game-over.mp3")).play();
                 tom.setAlive(false);
                 terminal.bell();
             }
         }
         terminal.flush();
     }
-
-
 }
