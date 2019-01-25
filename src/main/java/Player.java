@@ -5,7 +5,7 @@ public class Player {
     private  int oldX;
     private  int oldY;
     private int direction = 4;
-    private char symbol = 'X';
+    private char symbol = 'X'; // X ﬕ
     private boolean isAlive = true;
 
 

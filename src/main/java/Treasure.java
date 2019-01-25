@@ -4,8 +4,9 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Treasure {
     private int x;
     private int y;
-    private char symbol = '*';
+    private char symbol = '♦';
     private boolean isCollected=false;
+    private int blinker =0;
 
     public boolean isNotTaken() {
         return isCollected;
@@ -38,6 +39,14 @@ public class Treasure {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public int getBlinker() {
+        return blinker;
+    }
+
+    public void setTreasureColorSwitch() {
+        this.blinker++;
     }
 
     public boolean isCollected() {

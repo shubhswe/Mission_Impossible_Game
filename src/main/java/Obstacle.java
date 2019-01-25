@@ -23,7 +23,7 @@ public class Obstacle {
         return positions;
     }
 
-    private char symbol = '\u2588';
+    private char symbol = '\u2593'; //JL updated  ░ ▒
 
 
     public char getSymbol() {

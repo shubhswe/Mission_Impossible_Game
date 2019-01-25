@@ -30,15 +30,15 @@ public class Main {
         Collections.addAll(listOfObstacles,obstacle, topWall, leftWall, bottomWall, rightWall);
 
         List<Police> listOfPolice = new ArrayList<>();
-        listOfPolice.add(new Police(0,2,'P'));
-        listOfPolice.add(new Police(78,2,'P'));
+        listOfPolice.add(new Police(0,2,'Ẋ'));
+        listOfPolice.add(new Police(78,2,'Ẋ'));
 
         KeyStroke keyStroke = null;
         int gameSpeed = 80;         //Sets the speed of the game, lower number means faster game (milliseconds)
         int treasuresToCollect = 1;
 
 
-        //welcomeScreen(terminal);
+        welcomeScreen(terminal);
         levelCountdown(terminal);
 
         while (tom.isAlive()) {
@@ -126,29 +126,50 @@ public class Main {
             printTextDelay(terminal, "Collect item(s)", 32, 1, 0);
         }else{
             printTextDelay(terminal, "Get out of there!", 32, 1, 0);
+
+            if (treasure1.getBlinker() % 2 == 0) {
+                terminal.setForegroundColor(TextColor.Indexed.fromRGB(255,234,0)); // Exit arrow blinking color
+            } else {
+                terminal.setForegroundColor(TextColor.Indexed.fromRGB(128,75,0)); // Exit arrow blinking color
+            }
+
+            printTextDelay(terminal, ">>", 77, 21, 0);
+
         }
 
         terminal.setCursorPosition(treasure1.getX(), treasure1.getY());         // printing treasure
+        if (treasure1.getBlinker() % 2 == 0) {
+            terminal.setForegroundColor(TextColor.Indexed.fromRGB(255,234,0)); // Treasure color
+        } else {
+            terminal.setForegroundColor(TextColor.Indexed.fromRGB(128,75,0)); // Treasure color
+        }
         terminal.putCharacter(treasure1.getSymbol());
+        treasure1.setTreasureColorSwitch();
+        terminal.setForegroundColor(TextColor.ANSI.WHITE);
 
         terminal.setCursorPosition(tom.getX(), tom.getY());                      //printing tom
+        terminal.setForegroundColor(TextColor.Indexed.fromRGB(245,40,40)); // Tom color
         terminal.putCharacter(tom.getSymbol());
+        terminal.setForegroundColor(TextColor.ANSI.WHITE);
         terminal.setCursorPosition(tom.getOldX(), tom.getOldY());
         terminal.putCharacter(' ');
 
-
         for(Police p: listOfPolice){
             terminal.setCursorPosition(p.getX(), p.getY());                      //printing police
+            terminal.setForegroundColor(TextColor.Indexed.fromRGB(245,127,23)); // Police color
             terminal.putCharacter(p.getSymbol());
+            terminal.setForegroundColor(TextColor.ANSI.WHITE);
             terminal.setCursorPosition(p.getOldX(), p.getOldY());
             terminal.putCharacter(' ');
         }
 
+        terminal.setForegroundColor(TextColor.Indexed.fromRGB(138,51,53)); // Obstacle color
         obstacle.printBlock(3, 3, terminal);                     //Printing obstacles
         topWall.printBlock(80,1,0,0,terminal);
         leftWall.printBlock(2,20,0, 4,terminal);
         bottomWall.printBlock(80,1,0,23,terminal);
         rightWall.printBlock(2,20,78,0,terminal);
+        terminal.setForegroundColor(TextColor.ANSI.WHITE);
 
         terminal.flush();
         }
