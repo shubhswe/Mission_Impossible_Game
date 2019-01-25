@@ -1,7 +1,3 @@
-import jdk.nashorn.internal.ir.Terminal;
-
-import java.util.List;
-
 public class Player {
 
     private int x;
@@ -11,7 +7,8 @@ public class Player {
     private int direction = 4;
     private char symbol = 'X'; // X ﬕ
     private boolean isAlive = true;
-    private boolean levelCompleted = true;
+    private boolean levelCompleted = false;
+    private boolean allItemsCollected = false;
 
     public boolean isLevelCompleted() {
         return levelCompleted;
@@ -19,6 +16,14 @@ public class Player {
 
     public void setLevelCompleted(boolean levelCompleted) {
         this.levelCompleted = levelCompleted;
+    }
+
+    public boolean isAllItemsCollected() {
+        return allItemsCollected;
+    }
+
+    public void setAllItemsCollected(boolean allItemsCollected) {
+        this.allItemsCollected = allItemsCollected;
     }
 
     public Player(int x, int y) {
