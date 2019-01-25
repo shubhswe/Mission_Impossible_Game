@@ -38,7 +38,7 @@ public class Main {
         int treasuresToCollect = 1;
 
 
-        welcomeScreen(terminal);
+        //welcomeScreen(terminal);
         levelCountdown(terminal);
 
         while (tom.isAlive()) {
@@ -55,10 +55,63 @@ public class Main {
 
         }
 
+        level2(terminal,tom);
+
         terminal.clearScreen();
         terminal.setForegroundColor(TextColor.ANSI.RED);
         printTextDelay(terminal,"GAME OVER", 35,10,200);
         terminal.setForegroundColor(TextColor.ANSI.WHITE);
+    }
+
+    public static void level2(Terminal terminal, Player tom) throws IOException, InterruptedException {
+        terminal.clearScreen();
+        level2Countdown(terminal);
+        terminal.clearScreen();
+
+        Treasure treasure1 = new Treasure(75,5);
+        treasure1.setCollected(false);
+        Treasure treasure2 = new Treasure(10,20);
+        treasure2.setCollected(false);
+
+        List<Obstacle> listOfObstacles = new ArrayList<>(); //list of obstacles
+        Obstacle obstacle = new Obstacle();
+        Obstacle topWall = new Obstacle();
+        Obstacle leftWall = new Obstacle();
+        Obstacle bottomWall = new Obstacle();
+        Obstacle rightWall = new Obstacle();
+        Obstacle wall1 = new Obstacle();
+        Obstacle wall2 = new Obstacle();
+        Obstacle wall3 = new Obstacle();
+        Obstacle wall4 = new Obstacle();
+        Collections.addAll(listOfObstacles,obstacle, topWall, leftWall, bottomWall, rightWall, wall1, wall2, wall3, wall4);
+
+        Police police = new Police(9,19,'Ẋ');
+        Police police2 = new Police(74,6,'Ẋ');
+        List<Police> policeList = new ArrayList<>();
+        policeList.add(police);
+        policeList.add(police2);
+
+        KeyStroke keyStroke = null;
+        tom.setX(10);
+        tom.setY(2);
+        tom.setDirection(4);
+        tom.setAlive(true);
+
+        int gameSpeed = 100;
+
+        while (tom.isAlive()) {
+
+            drawBoard2(terminal,tom, treasure1, treasure2, topWall,leftWall,bottomWall,rightWall, wall1, wall2, wall3, wall4,police, police2);
+
+            movePlayer(keyStroke, tom, terminal);
+
+            movePolice(policeList,tom);
+
+            checkMove2(terminal,tom,treasure1,treasure2,listOfObstacles,policeList);
+
+            Thread.sleep(gameSpeed);
+        }
+
     }
 
     public static void welcomeScreen(Terminal terminal) throws IOException, InterruptedException {
@@ -99,6 +152,29 @@ public class Main {
     public static void levelCountdown(Terminal terminal) throws IOException, InterruptedException {
 
         printTextDelay(terminal,"Level 1, starting in:", 30,10,60);
+
+        Thread.sleep(600);
+        printTextDelay(terminal, "3", 40, 12, 0);
+        Thread.sleep(600);
+        printTextDelay(terminal, " ", 40, 12, 0);
+        Thread.sleep(600);
+        printTextDelay(terminal, "2", 40, 12, 0);
+        Thread.sleep(600);
+        printTextDelay(terminal, " ", 40, 12, 0);
+        Thread.sleep(600);
+        printTextDelay(terminal, "1", 40, 12, 0);
+        Thread.sleep(600);
+        printTextDelay(terminal, " ", 40, 12, 0);
+        Thread.sleep(1000);
+
+        terminal.clearScreen();
+        terminal.setForegroundColor(TextColor.ANSI.WHITE);
+        terminal.flush();
+
+    }
+    public static void level2Countdown(Terminal terminal) throws IOException, InterruptedException {
+
+        printTextDelay(terminal,"Level 2, starting in:", 30,10,60);
 
         Thread.sleep(600);
         printTextDelay(terminal, "3", 40, 12, 0);
@@ -256,6 +332,118 @@ public class Main {
             terminal.flush();
         }
 
+    }
+
+    public static void drawBoard2(Terminal terminal, Player tom, Treasure treasure1, Treasure treasure2, Obstacle topWall, Obstacle leftWall, Obstacle bottomWall, Obstacle rightWall, Obstacle wall1, Obstacle wall2, Obstacle wall3, Obstacle wall4, Police police, Police police2) throws IOException, InterruptedException {
+
+        if(!treasure1.isCollected() && !treasure2.isCollected()) {
+            printTextDelay(terminal, "Collect item(s)", 32, 1, 0);
+        }else{
+            printTextDelay(terminal, "Get out of there!", 32, 1, 0);
+
+            if (treasure1.getBlinker() % 2 == 0) {
+                terminal.setForegroundColor(TextColor.Indexed.fromRGB(255,234,0)); // Exit arrow blinking color
+            } else {
+                terminal.setForegroundColor(TextColor.Indexed.fromRGB(128,75,0)); // Exit arrow blinking color
+            }
+            printTextDelay(terminal, ">>", 77, 21, 0);
+        }
+
+        terminal.setCursorPosition(treasure2.getX(), treasure2.getY());         // printing treasure2
+
+        if (treasure2.getBlinker() % 2 == 0) {
+            terminal.setForegroundColor(TextColor.Indexed.fromRGB(255,234,0)); // Treasure color
+        } else {
+            terminal.setForegroundColor(TextColor.Indexed.fromRGB(128,75,0)); // Treasure color
+        }
+        terminal.putCharacter(treasure2.getSymbol());
+        treasure2.setTreasureColorSwitch();
+        terminal.setForegroundColor(TextColor.ANSI.WHITE);
+
+        terminal.setCursorPosition(treasure1.getX(), treasure1.getY());         // printing treasure
+        if (treasure1.getBlinker() % 2 == 0) {
+            terminal.setForegroundColor(TextColor.Indexed.fromRGB(255,234,0)); // Treasure color
+        } else {
+            terminal.setForegroundColor(TextColor.Indexed.fromRGB(128,75,0)); // Treasure color
+        }
+        terminal.putCharacter(treasure1.getSymbol());
+        treasure1.setTreasureColorSwitch();
+        terminal.setForegroundColor(TextColor.ANSI.WHITE);
+
+        terminal.setCursorPosition(tom.getX(), tom.getY());                      //printing tom
+        terminal.setForegroundColor(TextColor.Indexed.fromRGB(245,40,40)); // Tom color
+        terminal.putCharacter(tom.getSymbol());
+        terminal.setForegroundColor(TextColor.ANSI.WHITE);
+        terminal.setCursorPosition(tom.getOldX(), tom.getOldY());
+        terminal.putCharacter(' ');
+
+        terminal.setCursorPosition(police.getX(), police.getY());                                //printing police
+        terminal.setForegroundColor(TextColor.Indexed.fromRGB(245,127,23));  // Police color
+        terminal.putCharacter(police.getSymbol());
+        terminal.setForegroundColor(TextColor.ANSI.WHITE);
+        terminal.setCursorPosition(police.getOldX(), police.getOldY());
+        terminal.putCharacter(' ');
+
+        terminal.setCursorPosition(police2.getX(), police2.getY());                                //printing police2
+        terminal.setForegroundColor(TextColor.Indexed.fromRGB(245,127,23));  // Police color
+        terminal.putCharacter(police2.getSymbol());
+        terminal.setForegroundColor(TextColor.ANSI.WHITE);
+        terminal.setCursorPosition(police2.getOldX(), police2.getOldY());
+        terminal.putCharacter(' ');
+
+        terminal.setForegroundColor(TextColor.Indexed.fromRGB(138,51,53)); // Obstacle color
+        topWall.printBlock(80,1,0,0,terminal);
+        leftWall.printBlock(2,20,0, 4,terminal);
+        bottomWall.printBlock(80,1,0,23,terminal);
+        rightWall.printBlock(2,20,78,0,terminal);
+        wall1.printBlock(15,1,0,15,terminal);
+        wall2.printBlock(2,8,19,15,terminal);
+        wall3.printBlock(45,1,35,15,terminal);
+        wall4.printBlock(2,12,50,0,terminal);
+        terminal.setForegroundColor(TextColor.ANSI.WHITE);
+
+        terminal.flush();
+    }
+
+    public static void checkMove2(Terminal terminal, Player tom, Treasure treasure1, Treasure treasure2, List <Obstacle> listOfObstacles, List<Police> listOfPolice) throws IOException, InterruptedException {
+
+        for(Obstacle o: listOfObstacles){
+            for(Position p: o.getPositions()){
+                if( tom.getX() == p.getX() && tom.getY() == p.getY()){
+                    tom.reverseDirection();
+                    tom.move();
+                    terminal.flush();
+                }
+            }
+        }
+
+        if (tom.getX()==treasure1.getX()&&tom.getY()==treasure1.getY()){
+
+            if(!treasure1.isCollected()) {
+                terminal.setCursorPosition(tom.getX(), tom.getY());
+                new MP3Player(new File("Ball+Hit+Cheer.mp3")).play();
+                treasure1.setSymbol(' ');
+                treasure1.setCollected(true);
+            }
+        }
+
+        if (tom.getX()==treasure2.getX()&&tom.getY()==treasure2.getY()){
+
+            if(!treasure2.isCollected()) {
+                terminal.setCursorPosition(tom.getX(), tom.getY());
+                new MP3Player(new File("Ball+Hit+Cheer.mp3")).play();
+                treasure2.setSymbol(' ');
+                treasure2.setCollected(true);
+            }
+        }
+
+        for(Police p:listOfPolice){
+            if(tom.getX() == p.getX() && tom.getY() == p.getY()){
+                tom.setAlive(false);
+                terminal.bell();
+            }
+        }
+        terminal.flush();
     }
 
 

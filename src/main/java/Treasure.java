@@ -16,6 +16,10 @@ public class Treasure {
         this.x = randomX();
         this.y = randomY();
     }
+    public Treasure(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
 
     public char getSymbol() {
         return symbol;
