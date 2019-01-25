@@ -1,3 +1,7 @@
+import jdk.nashorn.internal.ir.Terminal;
+
+import java.util.List;
+
 public class Player {
 
     private int x;
@@ -7,7 +11,15 @@ public class Player {
     private int direction = 4;
     private char symbol = 'X'; // X ﬕ
     private boolean isAlive = true;
+    private boolean levelCompleted = true;
 
+    public boolean isLevelCompleted() {
+        return levelCompleted;
+    }
+
+    public void setLevelCompleted(boolean levelCompleted) {
+        this.levelCompleted = levelCompleted;
+    }
 
     public Player(int x, int y) {
         this.x = x;
@@ -123,4 +135,18 @@ public class Player {
                 break;
         }
     }
+
+//    public boolean levelComplete(Player tom, int x, int y, List<Position> exitPos, Terminal terminal){
+//        boolean complete=false;
+//
+//        for(Position p: getPositions()){
+//            if( tom.getX() == p.getX() && tom.getY() == p.getY()){
+//                tom.reverseDirection();
+//                tom.move();
+//            }
+//        }
+//
+//
+//        return complete;
+//    }
 }

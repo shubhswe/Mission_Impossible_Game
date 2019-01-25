@@ -14,9 +14,13 @@ public class Obstacle {
 
     List<Position> positions = new ArrayList<>();
 
+
     public Obstacle() {
         x = ThreadLocalRandom.current().nextInt(5, 75);
         y = ThreadLocalRandom.current().nextInt(5, 19);
+
+
+
     }
 
     public List<Position> getPositions() {

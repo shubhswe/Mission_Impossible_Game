@@ -70,4 +70,6 @@ public class Treasure {
         return ThreadLocalRandom.current().nextInt(2, 78);
 
     }
+
+
 }

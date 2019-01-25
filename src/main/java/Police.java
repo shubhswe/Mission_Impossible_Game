@@ -1,3 +1,5 @@
+import java.util.concurrent.ThreadLocalRandom;
+
 public class Police {
     private int x;
     private int y;
@@ -18,6 +20,14 @@ public class Police {
         return x;
     }
 
+    public void setX() {
+        x = ThreadLocalRandom.current().nextInt(5, 75);
+    }
+
+    public void setY() {
+        y = ThreadLocalRandom.current().nextInt(5, 19);
+    }
+
     public int getY() {
         return y;
     }
@@ -35,12 +45,6 @@ public class Police {
     }
 
     public void moveTowards(Player player) {
-        // a monster wants to minimize the distance between itself and the player
-
-        // Along which axis should the monster move in?
-        // The monster will move in the direction in which the distance between monster and player is the largest.
-        // Let's use the absolute value of the difference between the x-coordinates vs the y-coordinates!
-        // Example of Math.abs -> https://www.tutorialspoint.com/java/lang/math_abs_int.htm
 
         oldX = x;
         oldY = y;
